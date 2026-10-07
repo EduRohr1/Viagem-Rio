@@ -1,0 +1,317 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Rio na Final do CBLOL</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: cabeçalho da viagem, chips de dias fixos no topo, cada dia como linha do tempo com opções clicáveis (Google Maps), depois guia de restaurantes e to-do */
+:root{
+  --bg:#F2F6F6; --surface:#FFFFFF; --ink:#11252C; --muted:#56696F; --line:#D3DFE0;
+  --sea:#0A6F78; --sea-soft:#DDEFF0; --sun:#A86300; --sun-soft:#FBEBCC; --event:#6B3FB5; --event-soft:#ECE4F8;
+  --display:"Unbounded","Arial Black",system-ui,sans-serif;
+  --body:"Figtree","Segoe UI",system-ui,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0C181C; --surface:#13242A; --ink:#E6F0F1; --muted:#97AEB3; --line:#24393F;
+  --sea:#4CC3CC; --sea-soft:#163A3F; --sun:#F2B341; --sun-soft:#3A2C12; --event:#B596EC; --event-soft:#2B2140; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0C181C; --surface:#13242A; --ink:#E6F0F1; --muted:#97AEB3; --line:#24393F;
+  --sea:#4CC3CC; --sea-soft:#163A3F; --sun:#F2B341; --sun-soft:#3A2C12; --event:#B596EC; --event-soft:#2B2140; color-scheme:dark}
+
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.5}
+.wrap{max-width:880px;margin:0 auto;padding-inline:18px;padding-block:28px 64px}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0;letter-spacing:-.01em}
+h1{font-size:clamp(1.9rem,6vw,3rem);line-height:1.05;font-weight:700}
+h2{font-size:clamp(1.25rem,3.6vw,1.6rem);font-weight:700}
+h3{font-size:1rem;font-weight:700;margin-top:22px}
+a{color:var(--sea)}
+a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(--sea);outline-offset:2px;border-radius:4px}
+.wave{height:14px;margin-block:18px 22px;color:var(--ink);opacity:.85;
+  background:radial-gradient(circle at 10px -3px,transparent 9px,currentColor 9.5px,currentColor 13px,transparent 13.5px) 0 0/20px 14px repeat-x}
+.eyebrow{font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;font-weight:700;color:var(--sea)}
+.lead{color:var(--muted);max-width:62ch;margin:.6rem 0 0}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-top:20px}
+.fact{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 14px;min-width:0}
+.fact b{display:block;font-size:.75rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:600}
+.fact span{font-weight:600}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+
+nav.days{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);
+  display:flex;gap:8px;overflow-x:auto;padding-block:12px;margin-top:22px;border-bottom:1px solid var(--line);scrollbar-width:none}
+nav.days a{flex:0 0 auto;text-decoration:none;color:var(--ink);border:1px solid var(--line);background:var(--surface);
+  border-radius:999px;padding:6px 12px;font-weight:600;font-size:.88rem;white-space:nowrap}
+.legend{display:flex;flex-wrap:wrap;gap:8px 14px;margin-top:14px;font-size:.85rem;color:var(--muted)}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+
+section{scroll-margin-top:72px}
+section.day{margin-top:44px}
+.dayhead{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 14px}
+.dayhead .date{font-family:var(--mono);color:var(--muted);font-size:.9rem}
+.wx{font-family:var(--mono);font-size:.8rem;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:1px 9px}
+.near{margin:.7rem 0 0;padding:10px 12px;border-radius:8px;background:var(--sea-soft);font-size:.93rem;max-width:70ch}
+
+ol.route{list-style:none;margin:18px 0 0;padding:0}
+.stop{display:grid;grid-template-columns:58px 18px 1fr;column-gap:12px}
+.stop .t{font-family:var(--mono);font-size:.88rem;padding-top:3px;text-align:right;color:var(--muted)}
+.rail{position:relative;display:flex;justify-content:center}
+.rail::before{content:"";position:absolute;top:0;bottom:0;width:2px;background:var(--line)}
+.stop:first-child .rail::before{top:10px}
+.stop:last-child .rail::before{display:none}
+.dot{position:relative;margin-top:6px;width:14px;height:14px;border-radius:50%;background:var(--surface);border:3px solid var(--sea)}
+.stop.m .dot{border-color:var(--sun);background:var(--sun)}
+.stop.e .dot{border-color:var(--event);background:var(--event)}
+.stop.x .dot{width:10px;height:10px;margin-top:8px;border-width:2px;border-color:var(--muted)}
+.body{padding-bottom:18px;min-width:0}
+.name{font-weight:700;font-size:1.03rem}
+.name a{color:inherit;text-decoration-color:var(--line);text-underline-offset:3px}
+.name a:hover{color:var(--sea)}
+.stop.x .name{font-weight:500;color:var(--muted)}
+.tag{display:inline-block;font-size:.7rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;border-radius:5px;padding:2px 6px;margin-right:6px;vertical-align:2px;background:var(--sea-soft);color:var(--sea)}
+.m .tag{background:var(--sun-soft);color:var(--sun)}
+.e .tag{background:var(--event-soft);color:var(--event)}
+.note{color:var(--muted);font-size:.92rem;margin:.2rem 0 0}
+.ticket{display:inline-block;margin-top:.35rem;font-size:.78rem;font-weight:700;color:var(--event);border:1px dashed var(--event);border-radius:5px;padding:1px 7px}
+
+.opts{list-style:none;margin:.6rem 0 0;padding:0;display:grid;gap:8px}
+.opt{background:var(--surface);border:1px solid var(--line);border-radius:9px;padding:9px 12px;min-width:0}
+.opt .top{display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline}
+.opt a{font-weight:700;color:var(--ink);text-decoration:none}
+.opt a:hover{color:var(--sea);text-decoration:underline}
+.opt a::after{content:" ↗";color:var(--sea);font-weight:500}
+.price{font-family:var(--mono);font-size:.8rem;color:var(--sun)}
+.addr{font-size:.82rem;color:var(--muted)}
+.dist{font-family:var(--mono);font-size:.78rem;color:var(--sea);background:var(--sea-soft);border-radius:5px;padding:0 6px}
+.why{font-size:.9rem;margin-top:2px}
+
+.guide{margin-top:56px}
+.bring{margin-top:18px;background:var(--sun-soft);border:2px solid var(--sun);border-radius:12px;padding:16px 18px}
+.bring h2{font-size:1.1rem;color:var(--sun)}
+.bring ul{margin:.6rem 0 0;padding-left:1.1rem}
+.bring li{margin:.35rem 0}
+.todo em{font-style:normal;font-weight:700;color:var(--muted)}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px;margin-top:12px}
+.box{margin-top:44px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px}
+.todo{list-style:none;padding:0;margin:12px 0 0;display:grid;gap:8px}
+.todo label{display:flex;gap:10px;align-items:flex-start;cursor:pointer}
+.todo input{margin-top:4px;accent-color:var(--sea);width:18px;height:18px;flex:0 0 auto}
+.todo input:checked + span{text-decoration:line-through;color:var(--muted)}
+.box ul{padding-left:1.1rem;margin:.6rem 0 0}
+.box li{margin:.3rem 0}
+footer{margin-top:36px;font-size:.82rem;color:var(--muted)}
+@media (max-width:480px){.stop{grid-template-columns:46px 16px 1fr;column-gap:8px}.stop .t{font-size:.8rem}}
+@media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
+</style>
+<style>*,*::before,*::after{box-sizing:border-box}body{margin:0}img{max-width:100%}</style>
+</head>
+<body>
+
+
+<div class="wrap">
+  <nav class="days" aria-label="Seções" id="nav" style="margin-top:0"></nav>
+  <p class="note" style="margin-top:10px">Toque no nome de um lugar pra abrir no Google Maps. Distâncias a pé contadas a partir do Airbnb, aproximadas.</p>
+  <p class="note">Clima: previsão de 7/10 pra Copacabana. Dias de 22 a 26°C, sem calor forte, e quase sem chuva. A segunda (dia do Cristo) tem 35% de chance de chuva. Vale olhar de novo na véspera.</p>
+
+  <section class="bring" id="levar" aria-label="O que levar">
+    <h2>Não esquecer</h2>
+    <ul>
+      <li><b>Documento com foto, todo dia.</b> Pedem na final do CBLOL (18+), na Biblioteca Nacional e no Cristo.</li>
+      <li><b>Cartão usado na compra do combo + documento de quem comprou.</b> Pedem na catraca do Cristo (seg) e do AquaRio (dom). Quem comprou tem que estar junto.</li>
+      <li><b>Ingressos no celular:</b> CBLOL, combo, Pão de Açúcar e Museu do Amanhã.</li>
+      <li><b>Água, protetor solar e boné</b> pro Forte do Leme (sáb), o Cristo (seg) e a bike (ter).</li>
+      <li><b>Carregador portátil</b> pro dia da final e pro domingo, que são longos.</li>    </ul>
+  </section>
+
+  <div id="days"></div>
+
+  <section class="guide" id="restaurantes">
+    <h2>Guia de restaurantes</h2>
+    <p class="lead">Do mais barato pro mais caro, com o motivo de cada um ser conhecido.</p>
+    <div id="guide"></div>
+  </section>
+
+  <section class="box" id="todo">
+    <h2>Antes de ir</h2>
+    <ul class="todo" id="todolist"></ul>
+  </section>
+
+  <section class="box" id="avisos">
+    <h2>Conferir antes</h2>
+    <ul>
+      <li>A van do combo sai do Centro de Visitantes Paineiras. Pedir o Uber pra lá, e não pra Praça do Lido.</li>
+      <li>Não consegui confirmar: horário do Forte de Copacabana na terça e se o Jardim Botânico e os restaurantes do Horto abrem no feriado.</li>
+      <li>Bagagem despachada não está incluída nas passagens.</li>
+    </ul>
+  </section>
+
+  <footer>Informações de Time Out Rio, Riotur, Guia Michelin, Prefeitura do Rio e sites oficiais, conferidas em outubro de 2026. Horário pode mudar no feriado: confere no Maps antes de sair.</footer>
+</div>
+
+<script>
+const M = q => "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(q + ", Rio de Janeiro");
+const P = (n,a) => ({n, q: a ? n+", "+a : n});
+
+/* opções reutilizadas */
+const CAFE = {
+  duque:{n:"Padaria Duque de Caxias",a:"R. Gustavo Sampaio, 508, Leme",d:"~700 m · 9 min a pé",p:"$",w:"Abre 6h. Padaria raiz de bairro. Os moradores elogiam o pão italiano, o misto quente e as vitaminas."},
+  paocia:{n:"Pão & Cia",a:"R. Raimundo Corrêa, 9, Copacabana",d:"~2,2 km · Uber 8 min",p:"$ · ~R$50",w:"Abre 6h30. Bufê de café da manhã barato e bem servido, com panqueca e waffle."},
+  cardin:{n:"Café Cardin",a:"R. Constante Ramos, 44, Copacabana",d:"~2,4 km · Uber 8 min",p:"$$",w:"Abre 7h30. Inspirado nas cafeterias europeias. Café Solo R$32 ou Clássico R$49. Pedir os ovos cremosos."},
+  teva:{n:"Teva Deli",a:"Av. N. Sra. de Copacabana, 1334",d:"~3,7 km · Uber 12 min",p:"$$ · ~R$100",w:"Padaria vegana do chef do Teva. Croissant e pão de queijo. Domingo só abre ao meio-dia."},
+  pergula:{n:"Pérgula · Copacabana Palace",a:"Av. Atlântica, 1702",d:"~800 m · 10 min a pé",p:"$$$ · ~R$200",w:"Café da manhã à beira da piscina do hotel mais famoso do Brasil. Aberto a quem não é hóspede."},
+  panadero:{n:"Panadero",a:"R. Sousa Lima, 68, Copacabana",d:"~3,4 km · no caminho da bike",p:"$$",w:"Abre 8h, a 2 min do Forte de Copacabana. Combo de café da manhã, pão na chapa e café coado."},
+  colombof:{n:"Confeitaria Colombo do Forte",a:"Forte de Copacabana",d:"~3,5 km · no caminho da bike",p:"$$$",w:"Abre 10h, ter a dom. Café com vista da praia. Precisa pagar a entrada do Forte."}
+};
+const R = {
+  cervantes:{n:"Cervantes",a:"Av. Prado Júnior, 335, Copacabana",d:"~100 m · 1 min a pé",p:"$",w:"Desde 1955 e patrimônio carioca. Sanduíche de pernil com abacaxi. Aberto até 5h."},
+  shirley:{n:"Restaurante Shirley",a:"R. Gustavo Sampaio, 610, Leme",d:"~600 m · 8 min a pé",p:"$$ a $$$",w:"Aberto em 1954 por espanhóis, com receitas da Galícia. Patrimônio cultural desde 2025. Polvo e frutos do mar. Lugar pequeno, pode ter fila. Aberto até 0h."},
+  pergula:{n:"Pérgula · Copacabana Palace",a:"Av. Atlântica, 1702",d:"~800 m · 10 min a pé",p:"$$$",w:"Restaurante à beira da piscina do Copa. Pratos de R$100 a R$130. Melhor reservar. Aberto até 0h."},
+  marius:{n:"Marius Degustare",a:"Av. Atlântica, 290, Leme",d:"~1,2 km · 15 min a pé",p:"$$$$",w:"Rodízio de carnes e frutos do mar, um dos mais caros do país. Decoração de navio pirata afundado. Aberto até 0h."},
+  pavao:{n:"Bar Pavão Azul",a:"R. Hilário de Gouveia, 71, Copacabana",d:"~1,4 km · 17 min a pé",p:"$",w:"Boteco de 1957, patrimônio da cidade. Patanisca a ~R$8, bife à milanesa e mesas na calçada. Aberto até 0h."},
+  bamba:{n:"Quiosque Coisas de Bamba",a:"Av. Atlântica, quiosque 29, Copacabana",d:"~2,4 km · Uber 8 min",p:"$$",w:"Quiosque na areia com samba ao vivo e picanha. Aberto 24h."}
+};
+const JANTAR_LEME = [R.cervantes,R.pavao,R.shirley,R.pergula,R.marius];
+const IPANEMA = [
+  {n:"Bar do Adão",a:"Ipanema",p:"$",w:"Famoso pelos pastéis de dezenas de sabores. Bom e barato pra beliscar com chope."},
+  {n:"Boteco Boa Praça",a:"Ipanema",p:"$$",w:"Boteco de Ipanema da sua lista. Não consegui confirmar o que ele tem de especial."},
+  {n:"Teva",a:"Av. Henrique Dumont, 110, Ipanema",p:"$$ a $$$ · ~R$120",w:"Vegetariano considerado um dos melhores restaurantes do Rio. O chef trabalhou em Paris e Copenhague. Pedir o bao de cogumelo."},
+  {n:"Zazá Bistrô Tropical",a:"R. Joana Angélica, 40, Ipanema",p:"$$ a $$$ · ~R$200",w:"Casarão centenário com luz de velas no 2º andar, aberto há 25 anos. Moqueca de lula e peixe."},
+  {n:"Gero",a:"Ipanema",p:"$$$",w:"O italiano do Grupo Fasano, família que tem restaurante desde 1902. Jantar italiano clássico e mais arrumado."},
+  {n:"Satyricon",a:"R. Barão da Torre, Ipanema",p:"$$$ a $$$$",w:"Referência em frutos do mar, citado pelo Guia Michelin. Lagostas vivas no aquário."},
+  {n:"Oteque",a:"R. Conde de Irajá, 581, Botafogo",p:"$$$$ · ~R$1.000",w:"Fica em Botafogo. 2 estrelas Michelin e já entrou nos 50 melhores do mundo. Menu degustação de R$845, abre ter a sáb às 19h."}
+];
+const ALMOCO_TER = [R.cervantes,R.pavao,R.shirley,R.marius];
+const JANTAR_SAB = [R.cervantes,R.pavao,R.shirley,R.bamba,R.pergula];
+const JANTAR_SEG = [
+  {n:"Elena",a:"R. Pacheco Leão, 758, Jardim Botânico",d:"No Horto",p:"$$$ · ~R$250",w:"Casarão com vidro e jardins suspensos, cozinha asiática e drinks autorais. Abre 19h. Precisa reservar."},
+  {n:"Gonza Restaurante e Bar",a:"R. Pacheco Leão, 868, Jardim Botânico",d:"No Horto, ~150 m do Elena",p:"$$",w:"Restaurante argentino com carnes e drinks. Abre segunda até 23h. Vale reservar."},
+  {n:"Bráz Pizzaria",a:"R. Maria Angélica, 129, Jardim Botânico",d:"~2 km do Horto",p:"$$$",w:"Pizzaria paulistana famosa, das mais elogiadas do Rio. Segunda abre 18h30."}
+];
+
+/* k: p passeio, m comida, e evento/ingresso, x deslocamento */
+const DAYS = [
+ {id:"qui", w:"22–24°C · chuva 5%", d:"Qui 08/10", t:"Chegada e noite em Copacabana", near:"Tudo a pé a partir do Airbnb.", s:[
+  {t:"17:25",k:"x",n:"Pouso no Galeão"},
+  {t:"17:45",k:"x",n:"Uber até o Airbnb",note:"~50 min com trânsito"},
+  {t:"18:40",k:"p",tag:"Check-in",n:"Largar as malas e sair"},
+  {t:"19:30",k:"m",tag:"Jantar",n:"Jantar perto de casa",note:"Escolha uma opção:",opts:JANTAR_LEME},
+  {t:"21:00",k:"p",tag:"Noite",n:"Calçadão de Copacabana",q:"Calçadão de Copacabana",note:"Ver o Copacabana Palace iluminado."},
+  {t:"21:30",k:"p",tag:"Samba",n:"Quiosque Coisas de Bamba",q:"Quiosque Coisas de Bamba, Posto 4, Copacabana",note:"Posto 4, na areia. Samba todo dia."}
+ ]},
+ {id:"sex", w:"23–25°C · chuva 0%", d:"Sex 09/10", t:"Santa Teresa, Lapa e Centro", near:"Depois do Uber até o bondinho, quase tudo é a pé. Real Gabinete e Biblioteca só abrem em dia útil, por isso ficam na sexta.", s:[
+  {t:"08:15",k:"m",tag:"Café",n:"Café perto de casa",note:"Escolha uma opção:",opts:[CAFE.duque,CAFE.paocia,CAFE.cardin]},
+  {t:"09:00",k:"x",n:"Uber até a Estação Carioca do bondinho",note:"~20 min"},
+  {t:"09:30",k:"p",tag:"Passeio",n:"Bondinho de Santa Teresa",q:"Estação do Bonde de Santa Teresa, R. Lélio Gama, 2",note:"R$20 ida e volta, só vende na estação. Passa por cima dos Arcos da Lapa."},
+  {t:"10:00",k:"p",tag:"Passeio",n:"Largo dos Guimarães",q:"Largo dos Guimarães, Santa Teresa",note:"Andar pelo bairro."},
+  {t:"12:00",k:"m",tag:"Almoço",n:"Bar do Mineiro",q:"Bar do Mineiro, R. Paschoal Carlos Magno, 99, Santa Teresa",note:"Boteco clássico. Pastel de feijão e feijoada."},
+  {t:"13:30",k:"p",tag:"Passeio",n:"Escadaria Selarón",q:"Escadaria Selarón, Lapa",note:"Descer a pé por ela, que liga Santa Teresa à Lapa."},
+  {t:"14:15",k:"p",tag:"Passeio",n:"Arcos da Lapa",q:"Arcos da Lapa"},
+  {t:"14:45",k:"p",tag:"Grátis",n:"Real Gabinete Português de Leitura",q:"Real Gabinete Português de Leitura, R. Luís de Camões, 30",note:"Uber de ~10 min. Fecha às 17h."},
+  {t:"16:00",k:"p",tag:"Passeio",n:"Praça da Cinelândia",q:"Cinelândia",note:"Theatro Municipal e Biblioteca Nacional (fecha 17h, levar documento)."},
+  {t:"17:15",k:"x",n:"Uber até o Arpoador",note:"~35 min com trânsito de sexta"},
+  {t:"18:05",k:"p",tag:"Pôr do sol",n:"Pedra do Arpoador",q:"Pedra do Arpoador",note:"O pessoal aplaude quando o sol some."},
+  {t:"19:30",k:"m",tag:"Jantar",n:"Jantar em Ipanema",note:"Escolha uma opção (reservar antes):",opts:IPANEMA.slice(0,6)}
+ ]},
+ {id:"sab", w:"23–25°C · chuva 10%", d:"Sáb 10/10", t:"Forte do Leme e Final do CBLOL", near:"A abertura é só às 13h, então dá pra fazer o Forte do Leme de manhã, que fica do lado de casa.", s:[
+  {t:"08:00",k:"m",tag:"Café",n:"Café da manhã",note:"Escolha uma opção:",opts:[CAFE.duque,CAFE.paocia,CAFE.pergula]},
+  {t:"09:30",k:"p",tag:"R$10",n:"Forte do Leme",q:"Forte Duque de Caxias, Leme",note:"Abre 9h30. Trilha de 20 a 30 min com vista de Copacabana inteira. Paga com Pix. Levar água."},
+  {t:"10:45",k:"x",n:"Voltar pra casa e se arrumar"},
+  {t:"11:00",k:"x",n:"Uber até a Arena Carioca 1",note:"~50 min"},
+  {t:"12:00",k:"e",tag:"Evento",n:"Arena Carioca 1",q:"Arena Carioca 1, Av. Embaixador Abelardo Bueno, Barra Olímpica",note:"Almoço lá dentro. Levar documento, é 18+.",ticket:"Ingresso CBLOL já comprado"},
+  {t:"13:00",k:"e",tag:"Final",n:"Abertura com show da Ebony e a final"},
+  {t:"Noite",k:"m",tag:"Jantar",n:"Jantar na volta",note:"Todos abertos até meia-noite ou mais. Escolha uma opção:",opts:JANTAR_SAB}
+ ]},
+ {id:"dom", w:"23–25°C · chuva 15%", d:"Dom 11/10", t:"Porto, Urca e Pão de Açúcar", near:"Ida de metrô + VLT (barato e sem trânsito), Uber do Porto até a Urca (~20 min) e Uber de volta (~10 min). De bike seriam ~11 km até o Porto, cansativo antes de um dia cheio.", s:[
+  {t:"08:30",k:"m",tag:"Café",n:"Café",note:"Escolha uma opção:",opts:[CAFE.duque,CAFE.paocia,CAFE.cardin]},
+  {t:"09:15",k:"x",n:"Metrô Cardeal Arcoverde até Carioca, depois VLT até a Parada dos Museus",note:"~40 min. VLT: cartão Jaé ou Pix no validador."},
+  {t:"10:00",k:"p",tag:"Museu",n:"Museu do Amanhã",q:"Museu do Amanhã, Praça Mauá, 1",note:"R$40 inteira ou R$20 meia. ~2h.",ticket:"Reservar horário 10h"},
+  {t:"12:00",k:"m",tag:"Almoço",n:"Almoço no Porto",note:"Escolha uma opção:",opts:[
+    {n:"Edifício Touring",a:"Av. Rodrigues Alves, 10, Praça Mauá",p:"$$",w:"Prédio art déco de 1926 do lado do museu, com Boteco Belmonte, japonês, italiano e bar no terraço."},
+    {n:"Angu do Gomes",a:"R. Sacadura Cabral, 75, Largo da Prainha",p:"$",w:"Angu servido desde 1955, patrimônio carioca. Pedir o pastel de angu."}]},
+  {t:"13:15",k:"p",tag:"Passeio",n:"Boulevard Olímpico",q:"Boulevard Olímpico, Porto Maravilha",note:"Murais gigantes no caminho até o AquaRio."},
+  {t:"13:30",k:"e",tag:"Ingresso",n:"AquaRio",q:"AquaRio, Praça Muhammad Ali, Gamboa",note:"1 a 2h. Domingo abre até 18h.",ticket:"Combo: AquaRio dom 11/10 às 13:30"},
+  {t:"15:00",k:"x",n:"Uber até a Urca",note:"~20 min"},
+  {t:"15:30",k:"p",tag:"Passeio",n:"Mureta da Urca",q:"Mureta da Urca"},
+  {t:"16:30",k:"e",tag:"Ingresso",n:"Bondinho Pão de Açúcar",q:"Bondinho Pão de Açúcar, Av. Pasteur, 520, Urca",note:"Subir de dia e ficar pro pôr do sol (~18h05). Olhar o clima no site antes.",ticket:"Comprar pra dom 11/10"},
+  {t:"19:30",k:"m",tag:"Jantar",n:"Bar Urca",q:"Bar Urca, R. Cândido Gaffrée, 205",note:"Patrimônio carioca de 1939. Empada de camarão e cerveja, comendo na Mureta."},
+  {t:"21:00",k:"x",n:"Uber pra casa",note:"~10 min"}
+ ]},
+ {id:"seg", w:"23–25°C · chuva 35%", d:"Seg 12/10 · feriado", t:"Cristo, Gávea e Horto", near:"A van do combo sai do Centro de Visitantes Paineiras. Na volta, vão direto das Paineiras pra Gávea.", s:[
+  {t:"07:00",k:"m",tag:"Café",n:"Café rápido",note:"Escolha uma opção:",opts:[CAFE.duque,CAFE.paocia]},
+  {t:"07:30",k:"x",n:"Uber até o Centro de Visitantes Paineiras",note:"~25 min"},
+  {t:"08:00",k:"e",tag:"Ingresso",n:"Cristo Redentor",q:"Centro de Visitantes Paineiras Corcovado",note:"Van de ~15 min até o monumento. Elevador e escada rolante lá em cima. Feriado lota.",ticket:"Combo: Cristo seg 12/10 às 8h · levar cartão da compra + documento"},
+  {t:"10:45",k:"x",n:"Van de volta até as Paineiras"},
+  {t:"11:00",k:"x",n:"Uber até a Gávea",note:"~25 min"},
+  {t:"12:00",k:"m",tag:"Almoço",n:"Braseiro da Gávea",q:"Braseiro da Gávea, Praça Santos Dumont",note:"Indicação que vocês receberam."},
+  {t:"13:30",k:"p",tag:"Grátis",n:"Parque Lage",q:"Parque Lage, R. Jardim Botânico, 414",note:"Jardim aberto. O palacete e o café estão em reforma até 2027."},
+  {t:"14:45",k:"p",tag:"R$40",n:"Jardim Botânico",q:"Jardim Botânico do Rio de Janeiro",note:"Do lado do Parque Lage. Dá pra comprar online."},
+  {t:"17:00",k:"x",n:"Voltar pra casa e tomar banho"},
+  {t:"18:45",k:"x",n:"Uber até o Horto",note:"~25 min"},
+  {t:"19:15",k:"m",tag:"Jantar",n:"Jantar no Horto",note:"Segunda muita casa do Horto fecha (Casa Horto, Eleninha, Casa Camolese). Estas abrem:",ticket:"Reservar",opts:JANTAR_SEG}
+ ]},
+ {id:"ter", w:"24–26°C · chuva 15%", d:"Ter 13/10", t:"Circuito de praias e volta", near:"Manhã de bike pela orla e volta pro Leme a tempo do Uber pro aeroporto.", s:[
+  {t:"08:00",k:"x",n:"Bikes do Itaú pela orla até o fim de Copacabana",note:"~20 min"},
+  {t:"08:30",k:"m",tag:"Café",n:"Café perto do Forte",note:"Escolha uma opção:",opts:[CAFE.panadero,CAFE.teva,CAFE.colombof]},
+  {t:"09:45",k:"p",tag:"Passeio",n:"Forte de Copacabana",q:"Forte de Copacabana",note:"Museu e vista da praia."},
+  {t:"11:00",k:"p",tag:"Praia",n:"Praia de Ipanema",q:"Praia de Ipanema"},
+  {t:"12:15",k:"x",n:"Pedalar de volta pro Leme",note:"~30 min"},
+  {t:"13:00",k:"m",tag:"Almoço",n:"Almoço perto de casa",note:"Escolha uma opção:",opts:ALMOCO_TER},
+  {t:"14:00",k:"x",n:"Check-out"},
+  {t:"14:45",k:"x",n:"Uber pro Galeão",note:"~50 min"},
+  {t:"15:45",k:"e",tag:"Voo",n:"Aeroporto do Galeão",q:"Aeroporto Internacional do Galeão",note:"AD 2887 às 18:05. Sem bagagem despachada."}
+ ]}
+];
+
+const optHTML = o => `<li class="opt"><div class="top"><a href="${M(o.n+", "+o.a)}" target="_blank" rel="noopener">${o.n}</a><span class="price">${o.p}</span>${o.d?`<span class="dist">${o.d}</span>`:""}</div><div class="addr">${o.a}</div><div class="why">${o.w}</div></li>`;
+
+document.getElementById("nav").innerHTML =
+  DAYS.map(d=>`<a href="#${d.id}">${d.d.split(" · ")[0]}</a>`).join("") +
+  `<a href="#restaurantes">Restaurantes</a><a href="#todo">To do</a>`;
+
+document.getElementById("days").innerHTML = DAYS.map(d=>`
+ <section class="day" id="${d.id}">
+  <div class="dayhead"><h2>${d.t}</h2><span class="date">${d.d}</span><span class="wx">${d.w}</span></div>
+  <p class="near">${d.near}</p>
+  <ol class="route">${d.s.map(s=>`
+   <li class="stop ${s.k}">
+    <div class="t">${s.t}</div><div class="rail"><span class="dot"></span></div>
+    <div class="body">
+     <div class="name">${s.tag?`<span class="tag">${s.tag}</span>`:""}${s.q?`<a href="${M(s.q)}" target="_blank" rel="noopener">${s.n}</a>`:s.n}</div>
+     ${s.note?`<p class="note">${s.note}</p>`:""}
+     ${s.ticket?`<span class="ticket">${s.ticket}</span>`:""}
+     ${s.opts?`<ul class="opts">${s.opts.map(optHTML).join("")}</ul>`:""}
+    </div>
+   </li>`).join("")}
+  </ol>
+ </section>`).join("");
+
+document.getElementById("guide").innerHTML = `
+  <h3>Leme e Copacabana (perto de casa)</h3><ul class="opts">${[R.cervantes,R.pavao,R.bamba,R.shirley,R.pergula,R.marius].map(optHTML).join("")}</ul>
+  <h3>Horto e Jardim Botânico</h3><ul class="opts">${[JANTAR_SEG[1],JANTAR_SEG[2],JANTAR_SEG[0]].map(optHTML).join("")}</ul>
+  <h3>Ipanema e arredores</h3><ul class="opts">${IPANEMA.map(optHTML).join("")}</ul>
+  <h3>Cafés e padarias</h3><ul class="opts">${[CAFE.duque,CAFE.paocia,CAFE.cardin,CAFE.teva,CAFE.panadero,CAFE.pergula,CAFE.colombof].map(optHTML).join("")}</ul>`;
+
+const TODO = [
+  "Combo Cristo + AquaRio: AquaRio dom 11/10 às 13:30 e Cristo seg 12/10 às 8h",
+  "Ingresso do Pão de Açúcar pra dom 11/10",
+  "Ingresso do Museu do Amanhã pra dom 11/10, 10h",
+  "Ingresso do Jardim Botânico",
+  "Baixar o app da Bike Itaú e o app Jaé",
+  "<em>Opcional:</em> reservar o jantar de seg 12/10 no Horto (Elena ou Gonza), ~19h15",
+  "<em>Opcional:</em> reservar o jantar de sexta em Ipanema"
+];
+let done = {};
+try { done = JSON.parse(localStorage.getItem("rio-todo") || "{}"); } catch(e) {}
+document.getElementById("todolist").innerHTML = TODO.map((t,i)=>
+  `<li><label><input type="checkbox" id="todo${i}" data-i="${i}" ${done[i]?"checked":""}><span>${t}</span></label></li>`).join("");
+document.getElementById("todolist").addEventListener("change", e=>{
+  if(!e.target.dataset) return;
+  done[e.target.dataset.i] = e.target.checked;
+  try { localStorage.setItem("rio-todo", JSON.stringify(done)); } catch(err) {}
+});
+</script>
+
+</body>
+</html>
