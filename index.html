@@ -119,7 +119,7 @@ footer{margin-top:36px;font-size:.82rem;color:var(--muted)}
     <h2>Não esquecer</h2>
     <ul>
       <li><b>Documento com foto, todo dia.</b> Pedem na final do CBLOL (18+), na Biblioteca Nacional e no Cristo.</li>
-      <li><b>Cartão usado na compra do combo + documento de quem comprou.</b> Pedem na catraca do Cristo (seg) e do AquaRio (dom). Quem comprou tem que estar junto.</li>
+      <li><b>Cartão usado na compra do combo + documento de quem comprou.</b> Pedem na catraca do Cristo (seg) e do AquaRio (dom). O Eduardo comprou, então tem que estar junto. Levar também a DNE, porque o ingresso dele é de estudante.</li>
       <li><b>Ingressos no celular:</b> CBLOL, combo, Pão de Açúcar e Museu do Amanhã.</li>
       <li><b>Água, protetor solar e boné</b> pro Forte do Leme (sáb), o Cristo (seg) e a bike (ter).</li>
       <li><b>Carregador portátil</b> pro dia da final e pro domingo, que são longos.</li>    </ul>
@@ -141,7 +141,7 @@ footer{margin-top:36px;font-size:.82rem;color:var(--muted)}
   <section class="box" id="avisos">
     <h2>Conferir antes</h2>
     <ul>
-      <li>A van do combo sai do Centro de Visitantes Paineiras. Pedir o Uber pra lá, e não pra Praça do Lido.</li>
+      <li>A van do combo sai do Centro de Visitantes Paineiras, com embarque entre 7h e 7h50. Pedir o Uber pra lá.</li>
       <li>Não consegui confirmar: horário do Forte de Copacabana na terça e se o Jardim Botânico e os restaurantes do Horto abrem no feriado.</li>
       <li>Bagagem despachada não está incluída nas passagens.</li>
     </ul>
@@ -202,7 +202,7 @@ const DAYS = [
  ]},
  {id:"sex", w:"23–25°C · chuva 0%", d:"Sex 09/10", t:"Santa Teresa, Lapa e Centro", near:"Depois do Uber até o bondinho, quase tudo é a pé. Real Gabinete e Biblioteca só abrem em dia útil, por isso ficam na sexta.", s:[
   {t:"08:15",k:"m",tag:"Café",n:"Café perto de casa",note:"Escolha uma opção:",opts:[CAFE.duque,CAFE.paocia,CAFE.cardin]},
-  {t:"09:00",k:"x",n:"Uber até a Estação Carioca do bondinho",note:"~20 min"},
+  {t:"08:50",k:"x",n:"Metrô Cardeal Arcoverde até a estação Carioca",note:"~15 min, direto. Paga com cartão por aproximação. Da estação, ~5 min a pé até o bondinho."},
   {t:"09:30",k:"p",tag:"Passeio",n:"Bondinho de Santa Teresa",q:"Estação do Bonde de Santa Teresa, R. Lélio Gama, 2",note:"R$20 ida e volta, só vende na estação. Passa por cima dos Arcos da Lapa."},
   {t:"10:00",k:"p",tag:"Passeio",n:"Largo dos Guimarães",q:"Largo dos Guimarães, Santa Teresa",note:"Andar pelo bairro."},
   {t:"12:00",k:"m",tag:"Almoço",n:"Bar do Mineiro",q:"Bar do Mineiro, R. Paschoal Carlos Magno, 99, Santa Teresa",note:"Boteco clássico. Pastel de feijão e feijoada."},
@@ -231,25 +231,24 @@ const DAYS = [
     {n:"Edifício Touring",a:"Av. Rodrigues Alves, 10, Praça Mauá",p:"$$",w:"Prédio art déco de 1926 do lado do museu, com Boteco Belmonte, japonês, italiano e bar no terraço."},
     {n:"Angu do Gomes",a:"R. Sacadura Cabral, 75, Largo da Prainha",p:"$",w:"Angu servido desde 1955, patrimônio carioca. Pedir o pastel de angu."}]},
   {t:"13:15",k:"p",tag:"Passeio",n:"Boulevard Olímpico",q:"Boulevard Olímpico, Porto Maravilha",note:"Murais gigantes no caminho até o AquaRio."},
-  {t:"13:30",k:"e",tag:"Ingresso",n:"AquaRio",q:"AquaRio, Praça Muhammad Ali, Gamboa",note:"1 a 2h. Domingo abre até 18h.",ticket:"Combo: AquaRio dom 11/10 às 13:30"},
+  {t:"13:30",k:"e",tag:"Ingresso",n:"AquaRio",q:"AquaRio, Praça Muhammad Ali, Gamboa",note:"1 a 2h. Domingo abre até 18h.",ticket:"Combo LB31872249 · entrada 13:30–14:00 · levar cartão da compra + documento + DNE"},
   {t:"15:00",k:"x",n:"Uber até a Urca",note:"~20 min"},
   {t:"15:30",k:"p",tag:"Passeio",n:"Mureta da Urca",q:"Mureta da Urca"},
   {t:"16:30",k:"e",tag:"Ingresso",n:"Bondinho Pão de Açúcar",q:"Bondinho Pão de Açúcar, Av. Pasteur, 520, Urca",note:"Subir de dia e ficar pro pôr do sol (~18h05). Olhar o clima no site antes.",ticket:"Comprar pra dom 11/10"},
   {t:"19:30",k:"m",tag:"Jantar",n:"Bar Urca",q:"Bar Urca, R. Cândido Gaffrée, 205",note:"Patrimônio carioca de 1939. Empada de camarão e cerveja, comendo na Mureta."},
   {t:"21:00",k:"x",n:"Uber pra casa",note:"~10 min"}
  ]},
- {id:"seg", w:"23–25°C · chuva 35%", d:"Seg 12/10 · feriado", t:"Cristo, Gávea e Horto", near:"A van do combo sai do Centro de Visitantes Paineiras. Na volta, vão direto das Paineiras pra Gávea.", s:[
-  {t:"07:00",k:"m",tag:"Café",n:"Café rápido",note:"Escolha uma opção:",opts:[CAFE.duque,CAFE.paocia]},
-  {t:"07:30",k:"x",n:"Uber até o Centro de Visitantes Paineiras",note:"~25 min"},
-  {t:"08:00",k:"e",tag:"Ingresso",n:"Cristo Redentor",q:"Centro de Visitantes Paineiras Corcovado",note:"Van de ~15 min até o monumento. Elevador e escada rolante lá em cima. Feriado lota.",ticket:"Combo: Cristo seg 12/10 às 8h · levar cartão da compra + documento"},
-  {t:"10:45",k:"x",n:"Van de volta até as Paineiras"},
-  {t:"11:00",k:"x",n:"Uber até a Gávea",note:"~25 min"},
-  {t:"12:00",k:"m",tag:"Almoço",n:"Braseiro da Gávea",q:"Braseiro da Gávea, Praça Santos Dumont",note:"Indicação que vocês receberam."},
-  {t:"13:30",k:"p",tag:"Grátis",n:"Parque Lage",q:"Parque Lage, R. Jardim Botânico, 414",note:"Jardim aberto. O palacete e o café estão em reforma até 2027."},
-  {t:"14:45",k:"p",tag:"R$40",n:"Jardim Botânico",q:"Jardim Botânico do Rio de Janeiro",note:"Do lado do Parque Lage. Dá pra comprar online."},
-  {t:"17:00",k:"x",n:"Voltar pra casa e tomar banho"},
+ {id:"seg", w:"23–25°C · chuva 35%", d:"Seg 12/10 · feriado", t:"Cristo, Jardim Botânico e Gávea", near:"Embarque do Cristo entre 7h e 7h50 no Centro de Visitantes Paineiras. Lá em cima a permanência é livre. Na volta, vão direto das Paineiras pro Parque Lage.", s:[
+  {t:"06:00",k:"m",tag:"Café",n:"Café rápido",note:"A Duque de Caxias abre 6h.",opts:[CAFE.duque]},
+  {t:"06:25",k:"x",n:"Uber até o Centro de Visitantes Paineiras",note:"~25 min"},
+  {t:"07:00",k:"e",tag:"Ingresso",n:"Cristo Redentor",q:"Centro de Visitantes Paineiras Corcovado",note:"Van de ~15 min até o monumento. Elevador e escada rolante lá em cima. Sem limite de tempo.",ticket:"Combo LB31872249 · embarque 07:00–07:50 · levar cartão da compra + documento + DNE"},
+  {t:"09:30",k:"x",n:"Van de volta até as Paineiras e Uber até o Parque Lage",note:"~20 min"},
+  {t:"10:00",k:"p",tag:"Grátis",n:"Parque Lage",q:"Parque Lage, R. Jardim Botânico, 414",note:"Jardim aberto. O palacete e o café estão em reforma até 2027."},
+  {t:"11:15",k:"p",tag:"R$40",n:"Jardim Botânico",q:"Jardim Botânico do Rio de Janeiro",note:"Do lado do Parque Lage. Dá pra comprar online."},
+  {t:"13:15",k:"m",tag:"Almoço",n:"Braseiro da Gávea",q:"Braseiro da Gávea, Praça Santos Dumont, 116",note:"Uber de ~5 min. Picanha ao braseiro com arroz de brócolis e farofa, serve 2 a 3. Costuma ter fila, mas anda rápido."},
+  {t:"15:00",k:"x",n:"Voltar pra casa e descansar",note:"Uber ~25 min"},
   {t:"18:45",k:"x",n:"Uber até o Horto",note:"~25 min"},
-  {t:"19:15",k:"m",tag:"Jantar",n:"Jantar no Horto",note:"Segunda muita casa do Horto fecha (Casa Horto, Eleninha, Casa Camolese). Estas abrem:",ticket:"Reservar",opts:JANTAR_SEG}
+  {t:"19:15",k:"m",tag:"Jantar",n:"Jantar no Horto",note:"Segunda muita casa do Horto fecha (Casa Horto, Eleninha, Casa Camolese). Estas abrem:",ticket:"Reserva opcional",opts:JANTAR_SEG}
  ]},
  {id:"ter", w:"24–26°C · chuva 15%", d:"Ter 13/10", t:"Circuito de praias e volta", near:"Manhã de bike pela orla e volta pro Leme a tempo do Uber pro aeroporto.", s:[
   {t:"08:00",k:"x",n:"Bikes do Itaú pela orla até o fim de Copacabana",note:"~20 min"},
@@ -294,7 +293,7 @@ document.getElementById("guide").innerHTML = `
   <h3>Cafés e padarias</h3><ul class="opts">${[CAFE.duque,CAFE.paocia,CAFE.cardin,CAFE.teva,CAFE.panadero,CAFE.pergula,CAFE.colombof].map(optHTML).join("")}</ul>`;
 
 const TODO = [
-  "Combo Cristo + AquaRio: AquaRio dom 11/10 às 13:30 e Cristo seg 12/10 às 8h",
+  "<s>Combo Cristo + AquaRio</s> comprado (LB31872249)",
   "Ingresso do Pão de Açúcar pra dom 11/10",
   "Ingresso do Museu do Amanhã pra dom 11/10, 10h",
   "Ingresso do Jardim Botânico",
